@@ -1,103 +1,55 @@
 import { useEffect, useState } from "react";
-import {
-  obtenerProductos,
-  crearProducto,
-  eliminarProducto
-} from "./services/productosService";
+import { obtenerProductos } from "./services/productosService";
+import ProductoForm from "./components/ProductoForm";
+import ProductoList from "./components/ProductoList";
+import "./App.css";
 
 function App() {
   const [productos, setProductos] = useState([]);
-  const [form, setForm] = useState({
-    nombre: "",
-    categoria: "",
-    precio: "",
-    stock: ""
-  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const cargarProductos = async () => {
-    const data = await obtenerProductos();
-    setProductos(data);
+    try {
+      setLoading(true);
+      setError("");
+      const data = await obtenerProductos();
+      setProductos(data);
+    } catch (err) {
+      setError("Error al cargar productos: " + err.message);
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     cargarProductos();
   }, []);
 
-  const manejarCambio = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const guardarProducto = async (e) => {
-    e.preventDefault();
-
-    await crearProducto(form);
-
-    setForm({
-      nombre: "",
-      categoria: "",
-      precio: "",
-      stock: ""
-    });
-
-    cargarProductos();
-  };
-
-  const borrarProducto = async (id) => {
-    await eliminarProducto(id);
-    cargarProductos();
-  };
-
   return (
-    <main>
-      <h1>Inventario Fullstack</h1>
+    <div className="app-container">
+      <header className="app-header">
+        <h1>📦 Inventario Fullstack</h1>
+        <p>Gestión de productos con React + Firebase</p>
+      </header>
 
-      <form onSubmit={guardarProducto}>
-        <input
-          name="nombre"
-          placeholder="Nombre"
-          value={form.nombre}
-          onChange={manejarCambio}
-        />
+      {error && <div className="error-banner">{error}</div>}
 
-        <input
-          name="categoria"
-          placeholder="Categoría"
-          value={form.categoria}
-          onChange={manejarCambio}
-        />
+      <div className="app-content">
+        <aside className="form-section">
+          <ProductoForm onProductoCreado={cargarProductos} />
+        </aside>
 
-        <input
-          name="precio"
-          placeholder="Precio"
-          value={form.precio}
-          onChange={manejarCambio}
-        />
-
-        <input
-          name="stock"
-          placeholder="Stock"
-          value={form.stock}
-          onChange={manejarCambio}
-        />
-
-        <button type="submit">Guardar</button>
-      </form>
-
-      <hr />
-
-      <ul>
-        {productos.map((producto) => (
-          <li key={producto.id}>
-            {producto.nombre} - ${producto.precio} - Stock: {producto.stock}
-            <button onClick={() => borrarProducto(producto.id)}>
-              Eliminar
-            </button>
-          </li>
-        ))}
-      </ul>
+        <main className="lista-section">
+          <ProductoList
+            productos={productos}
+            onActualizar={cargarProductos}
+            loading={loading}
+          />
+        </main>
+      </div>
+    </div>
     </main>
   );
 }
