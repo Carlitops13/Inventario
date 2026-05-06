@@ -5,6 +5,8 @@
   --text-secondary: #666;
   --background: #f8f9fa;
   --border: #e0e0e0;
+  --success: #388e3c;
+  --error: #d32f2f;
 }
 
 * {
@@ -72,6 +74,8 @@ body {
   background: white;
   border-radius: 12px;
   overflow: hidden;
+  align-self: start;
+  height: fit-content;
 }
 
 .lista-section {
@@ -108,93 +112,7 @@ body {
     gap: 16px;
   }
 }
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
-}
 
-#center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
-}
-
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
 
   @media (max-width: 1024px) {
     margin-top: 20px;
@@ -241,4 +159,123 @@ body {
     right: 0;
     border-right-color: var(--border);
   }
+}
+
+/* ==================== AUTH CARD STYLES ==================== */
+.app-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border);
+  margin: 0 auto;
+}
+
+.auth-card h2 {
+  font-size: 28px;
+  margin-bottom: 8px;
+  color: var(--primary);
+  text-align: center;
+  font-weight: 700;
+}
+
+.auth-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+}
+
+.auth-card input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.auth-card input::placeholder {
+  color: #aaa;
+}
+
+.auth-card .row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.auth-card button {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.auth-card button:not(.secondary) {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.auth-card button:not(.secondary):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.auth-card button:not(.secondary):active {
+  transform: translateY(0);
+}
+
+.auth-card button.secondary {
+  background-color: #f0f0f0;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.auth-card button.secondary:hover {
+  background-color: #e8e8e8;
+}
+
+.auth-card .message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 16px;
+  text-align: center;
+  font-weight: 500;
+  border-left: 4px solid;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border: 1px solid var(--border);
 }

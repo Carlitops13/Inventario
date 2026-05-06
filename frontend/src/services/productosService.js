@@ -1,73 +1,80 @@
-const API_URL = "http://localhost:3000/api/productos";
-
-async function handleResponse(res) {
-  if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.mensaje || error.error || "Error en la solicitud");
-  }
-  return await res.json();
-}
+import { supabase } from '../supabaseClient';
 
 export async function obtenerProductos() {
   try {
-    const res = await fetch(API_URL);
-    return await handleResponse(res);
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) throw error;
+    return data;
   } catch (error) {
-    console.error("Error al obtener productos:", error);
+    console.error('Error al obtener productos:', error);
     throw error;
   }
 }
 
 export async function obtenerProductoPorId(id) {
   try {
-    const res = await fetch(`${API_URL}/${id}`);
-    return await handleResponse(res);
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
   } catch (error) {
-    console.error("Error al obtener producto:", error);
+    console.error('Error al obtener producto:', error);
     throw error;
   }
 }
 
 export async function crearProducto(producto) {
   try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(producto)
-    });
-    return await handleResponse(res);
+    const { data, error } = await supabase
+      .from('productos')
+      .insert([producto])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
   } catch (error) {
-    console.error("Error al crear producto:", error);
+    console.error('Error al crear producto:', error);
     throw error;
   }
 }
 
 export async function actualizarProducto(id, producto) {
   try {
-    const res = await fetch(`${API_URL}/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(producto)
-    });
-    return await handleResponse(res);
+    const { data, error } = await supabase
+      .from('productos')
+      .update(producto)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
   } catch (error) {
-    console.error("Error al actualizar producto:", error);
+    console.error('Error al actualizar producto:', error);
     throw error;
   }
 }
 
 export async function eliminarProducto(id) {
   try {
-    const res = await fetch(`${API_URL}/${id}`, {
-      method: "DELETE"
-    });
-    return await handleResponse(res);
+    const { error } = await supabase
+      .from('productos')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    return { mensaje: 'Producto eliminado' };
   } catch (error) {
-    console.error("Error al eliminar producto:", error);
+    console.error('Error al eliminar producto:', error);
     throw error;
   }
 }
